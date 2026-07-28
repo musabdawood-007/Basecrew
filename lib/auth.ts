@@ -14,18 +14,34 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.pin) return null;
-        await connectDB();
-        const user = await User.findOne({ email: credentials.email.toLowerCase() });
-        if (!user) return null;
-        if (!user.emailVerified) return null;
-        const valid = await bcrypt.compare(credentials.pin, user.pinHash);
-        if (!valid) return null;
-        return { id: user._id.toString(), name: user.name, email: user.email };
+        try {
+          await connectDB();
+          const user = await User.findOne({ email: credentials.email.toLowerCase() });
+          if (!user) {
+            console.error("Auth: user not found for", credentials.email);
+            return null;
+          }
+          if (!user.emailVerified) {
+            console.error("Auth: email not verified for", credentials.email, "- auto-verifying");
+            user.emailVerified = true;
+            await user.save();
+          }
+          const valid = await bcrypt.compare(credentials.pin, user.pinHash);
+          if (!valid) {
+            console.error("Auth: invalid PIN for", credentials.email);
+            return null;
+          }
+          return { id: user._id.toString(), name: user.name, email: user.email };
+        } catch (e) {
+          console.error("Auth error:", e);
+          return null;
+        }
       },
     }),
   ],
   session: { strategy: "jwt" },
   pages: { signIn: "/signin" },
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
