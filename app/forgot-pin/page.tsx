@@ -28,8 +28,9 @@ export default function ForgotPinPage() {
         setError(data.error || "Failed to send OTP");
         return;
       }
+      setSuccess("Reset code sent! Check your inbox (and spam/junk folder).");
       sessionStorage.setItem("reset-pin-email", email);
-      router.push("/reset-pin");
+      setTimeout(() => router.push("/reset-pin"), 1500);
     } catch {
       setError("Something went wrong");
       setLoading(false);

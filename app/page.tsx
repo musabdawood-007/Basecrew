@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ScrollReveal from "./components/ScrollReveal";
 import BusinessCountBadge from "./components/BusinessCountBadge";
+import FAQ from "./components/FAQ";
 
 const FEATURES = [
   {
@@ -376,6 +377,7 @@ export default function LandingPage() {
       <Hero />
       <Features />
       <HowItWorks />
+      <FAQ />
       <Stats />
       <CTA />
       <Footer />

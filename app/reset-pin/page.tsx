@@ -144,10 +144,11 @@ export default function ResetPinPage() {
                       value={digit}
                       onChange={(e) => handleOtpChange(i, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(i, e)}
-                      className="w-12 h-14 text-center text-lg font-mono font-bold text-gray-900 rounded-xl glass-input outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                      className="w-12 h-14 text-center text-lg font-mono font-bold text-gray-900 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-sm"
                     />
                   ))}
                 </div>
+                <p className="text-xs text-gray-400 text-center mt-2">Check your spam/junk folder if you don&apos;t see the email</p>
               </div>
 
               {error && <div className="p-3 rounded-xl bg-red-50 border border-red-100 text-sm text-red-600">{error}</div>}

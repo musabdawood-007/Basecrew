@@ -27,6 +27,21 @@ export default function SignInPage() {
     e.preventDefault();
     setError("");
     setLoading(true);
+
+    try {
+      const blockCheck = await fetch("/api/auth/check-blocked", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const blockData = await blockCheck.json();
+      if (blockData.blocked) {
+        setError("__BLOCKED__");
+        setLoading(false);
+        return;
+      }
+    } catch {}
+
     const result = await signIn("credentials", {
       email,
       pin,
@@ -34,7 +49,7 @@ export default function SignInPage() {
     });
     setLoading(false);
     if (result?.error) {
-      setError("Invalid email, PIN, or email not verified");
+      setError("Invalid email or PIN. Please try again.");
     } else {
       router.push("/dashboard");
       router.refresh();
@@ -115,7 +130,27 @@ export default function SignInPage() {
           </p>
 
           {error && (
-            <div className="mt-4 p-3 rounded-xl bg-red-50 border border-red-100 text-sm text-red-600">{error}</div>
+            error === "__BLOCKED__" ? (
+              <div className="mt-4 p-4 rounded-xl bg-red-50 border border-red-200">
+                <div className="flex items-start gap-3">
+                  <svg className="w-5 h-5 text-red-500 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                  </svg>
+                  <div>
+                    <p className="text-sm font-semibold text-red-700">Your account has been temporarily blocked</p>
+                    <p className="text-xs text-red-600 mt-1">Contact us for unblocking:</p>
+                    <a href="https://musab-007.netlify.app" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-700 mt-2 transition-colors">
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                      </svg>
+                      musab-007.netlify.app
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-4 p-3 rounded-xl bg-red-50 border border-red-100 text-sm text-red-600">{error}</div>
+            )
           )}
 
           <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
