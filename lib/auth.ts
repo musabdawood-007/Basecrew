@@ -21,6 +21,10 @@ export const authOptions: NextAuthOptions = {
             console.error("Auth: user not found for", credentials.email);
             return null;
           }
+          if (user.blocked) {
+            console.error("Auth: blocked user tried to sign in:", credentials.email);
+            return null;
+          }
           if (!user.emailVerified) {
             console.error("Auth: email not verified for", credentials.email, "- auto-verifying");
             user.emailVerified = true;
@@ -31,7 +35,7 @@ export const authOptions: NextAuthOptions = {
             console.error("Auth: invalid PIN for", credentials.email);
             return null;
           }
-          return { id: user._id.toString(), name: user.name, email: user.email };
+          return { id: user._id.toString(), name: user.name, email: user.email, role: user.role };
         } catch (e) {
           console.error("Auth error:", e);
           return null;
@@ -46,12 +50,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = (user as any).role;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).id = token.id;
+        (session.user as any).role = token.role;
       }
       return session;
     },

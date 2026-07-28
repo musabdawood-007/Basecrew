@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { BusinessProvider } from "./business-context";
 import { CurrencyProvider } from "./currency-context";
 import CurrencySwitcher from "./currency-switcher";
@@ -66,7 +67,7 @@ const NAV_ITEMS = [
   },
 ];
 
-function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
+function Sidebar({ open, onClose, isAdmin }: { open: boolean; onClose: () => void; isAdmin: boolean }) {
   const pathname = usePathname();
 
   return (
@@ -119,6 +120,24 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
               </Link>
             );
           })}
+          {isAdmin && (
+            <Link
+              href="/dashboard/admin"
+              onClick={onClose}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                pathname === "/dashboard/admin"
+                  ? "bg-indigo-50 text-indigo-700"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              }`}
+            >
+              <span className={pathname === "/dashboard/admin" ? "text-indigo-600" : "text-gray-400"}>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                </svg>
+              </span>
+              Admin
+            </Link>
+          )}
         </nav>
 
         <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-white/20">
@@ -167,8 +186,10 @@ function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
 }
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const { data: session } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const isAdmin = (session?.user as any)?.role === "admin";
 
   useEffect(() => {
     setMounted(true);
@@ -178,7 +199,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <CurrencyProvider>
       <BusinessProvider>
         <div className={`min-h-screen bg-gray-50/50 ${mounted ? "" : "opacity-0"}`}>
-          <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+          <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} isAdmin={isAdmin} />
           <div className="lg:pl-64">
             <Topbar onMenuClick={() => setSidebarOpen(true)} />
             <main className="p-4 sm:p-6 lg:p-8">{children}</main>

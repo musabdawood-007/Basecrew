@@ -5,6 +5,9 @@ export interface IUser extends Document {
   email: string;
   pinHash: string;
   emailVerified: boolean;
+  role: "user" | "admin";
+  blocked: boolean;
+  blockedAt?: Date;
   createdAt: Date;
 }
 
@@ -13,6 +16,9 @@ const UserSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   pinHash: { type: String, required: true },
   emailVerified: { type: Boolean, default: false },
+  role: { type: String, enum: ["user", "admin"], default: "user" },
+  blocked: { type: Boolean, default: false },
+  blockedAt: { type: Date },
   createdAt: { type: Date, default: Date.now },
 });
 

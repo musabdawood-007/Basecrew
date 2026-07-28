@@ -27,6 +27,9 @@ export async function POST(req: NextRequest) {
     const pinHash = await bcrypt.hash("123456", 12);
     const user = await User.create({ name: "Musab Dawood", email: "demo@musab.com", pinHash, emailVerified: true });
 
+    const adminPinHash = await bcrypt.hash("246800", 12);
+    await User.create({ name: "Admin", email: "admin@musab.com", pinHash: adminPinHash, emailVerified: true, role: "admin" });
+
     const biz1 = await Business.create({
       ownerId: user._id, name: "Musab's Software House", category: "Software House", description: "Custom web & mobile app development, UI/UX design, and maintenance retainers.", currency: "PKR",
     });
@@ -77,7 +80,7 @@ export async function POST(req: NextRequest) {
       { businessId: biz1._id, category: "Marketing", amount: 95000, note: "Google Ads", date: "2026-06-10" },
     ]);
 
-    return NextResponse.json({ message: "Seed complete. Demo: demo@musab.com / 123456" });
+    return NextResponse.json({ message: "Seed complete. Demo: demo@musab.com / 123456. Admin: admin@musab.com / 246800" });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
