@@ -29,15 +29,17 @@ export async function POST(req: NextRequest) {
       currency: "PKR",
     });
 
+    let otpSent = false;
     try {
       await sendVerificationOTP(email.toLowerCase(), "signup");
+      otpSent = true;
     } catch (emailErr) {
       console.error("OTP email failed, auto-verifying user:", emailErr);
       user.emailVerified = true;
       await user.save();
     }
 
-    return NextResponse.json({ message: "Account created. Check your email for verification code.", userId: user._id }, { status: 201 });
+    return NextResponse.json({ message: "Account created.", userId: user._id, otpSent, emailVerified: user.emailVerified }, { status: 201 });
   } catch (err: any) {
     console.error("Signup error:", err);
     return NextResponse.json({ error: err.message || "Server error" }, { status: 500 });

@@ -46,8 +46,12 @@ export default function SignUpPage() {
         setLoading(false);
         return;
       }
-      sessionStorage.setItem("verify-email", email);
-      router.push("/verify-email");
+      if (data.emailVerified) {
+        router.push("/signin");
+      } else {
+        sessionStorage.setItem("verify-email", email);
+        router.push("/verify-email");
+      }
     } catch {
       setError("Something went wrong");
       setLoading(false);
