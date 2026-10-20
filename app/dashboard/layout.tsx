@@ -67,8 +67,16 @@ const NAV_ITEMS = [
   },
 ];
 
-function Sidebar({ open, onClose, isAdmin }: { open: boolean; onClose: () => void; isAdmin: boolean }) {
+function Sidebar({ open, onClose, isAdmin, user }: { open: boolean; onClose: () => void; isAdmin: boolean; user: { name?: string | null; email?: string | null } }) {
   const pathname = usePathname();
+  const userName = user?.name || "User";
+  const initials = userName
+    .split(" ")
+    .map((w) => w[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase() || "U";
 
   return (
     <>
@@ -143,11 +151,11 @@ function Sidebar({ open, onClose, isAdmin }: { open: boolean; onClose: () => voi
         <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-white/20">
           <div className="flex items-center gap-3 px-3 py-2">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold">
-              MD
+              {initials}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">Musab Dawood</p>
-              <p className="text-xs text-gray-400 truncate">demo@musab.com</p>
+              <p className="text-sm font-medium text-gray-900 truncate">{userName}</p>
+              <p className="text-xs text-gray-400 truncate">{user?.email || ""}</p>
             </div>
             <a href="/" className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600" title="Sign out">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -199,7 +207,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <CurrencyProvider>
       <BusinessProvider>
         <div className={`min-h-screen bg-gray-50/50 ${mounted ? "" : "opacity-0"}`}>
-          <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} isAdmin={isAdmin} />
+          <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} isAdmin={isAdmin} user={session?.user} />
           <div className="lg:pl-64">
             <Topbar onMenuClick={() => setSidebarOpen(true)} />
             <main className="p-4 sm:p-6 lg:p-8">{children}</main>
