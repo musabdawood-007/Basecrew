@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 
 export type Currency = {
   code: string;
@@ -28,7 +28,18 @@ type CurrencyContextType = {
 const CurrencyContext = createContext<CurrencyContextType | null>(null);
 
 export function CurrencyProvider({ children }: { children: ReactNode }) {
-  const [currency, setCurrency] = useState<Currency>(CURRENCIES[0]);
+  const [currency, setCurrencyState] = useState<Currency>(CURRENCIES[0]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("basecrew_currency");
+    const found = CURRENCIES.find((c) => c.code === saved);
+    if (found) setCurrencyState(found);
+  }, []);
+
+  const setCurrency = (c: Currency) => {
+    setCurrencyState(c);
+    localStorage.setItem("basecrew_currency", c.code);
+  };
 
   const convert = (amountInPKR: number) => amountInPKR * currency.rate;
 

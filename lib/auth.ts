@@ -47,15 +47,19 @@ export const authOptions: NextAuthOptions = {
   pages: { signIn: "/signin" },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, session }) {
       if (user) {
         token.id = user.id;
         token.role = (user as any).role;
+      }
+      if (session?.name) {
+        token.name = session.name;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
+        if (token.name) session.user.name = token.name;
         (session.user as any).id = token.id;
         (session.user as any).role = token.role;
       }

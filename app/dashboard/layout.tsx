@@ -149,15 +149,25 @@ function Sidebar({ open, onClose, isAdmin, user }: { open: boolean; onClose: () 
         </nav>
 
         <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-white/20">
-          <div className="flex items-center gap-3 px-3 py-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold">
-              {initials}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">{userName}</p>
-              <p className="text-xs text-gray-400 truncate">{user?.email || ""}</p>
-            </div>
-            <a href="/" className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600" title="Sign out">
+          <div className="flex items-center gap-2 px-3 py-2">
+            <Link
+              href="/dashboard/account"
+              onClick={onClose}
+              title="Account settings"
+              className="flex items-center gap-3 flex-1 min-w-0 py-1 pr-1 rounded-xl hover:bg-white/60 transition-colors"
+            >
+              <div className="w-8 h-8 shrink-0 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold">
+                {initials}
+              </div>
+              <div className="flex-1 min-w-0 text-left">
+                <p className="text-sm font-medium text-gray-900 truncate">{userName}</p>
+                <p className="text-xs text-gray-400 truncate">{user?.email || ""}</p>
+              </div>
+              <svg className="w-4 h-4 shrink-0 text-gray-300" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+              </svg>
+            </Link>
+            <a href="/" className="p-1.5 shrink-0 rounded-lg hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600" title="Sign out">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
               </svg>
@@ -170,6 +180,16 @@ function Sidebar({ open, onClose, isAdmin, user }: { open: boolean; onClose: () 
 }
 
 function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
+  const [showOnline, setShowOnline] = useState(true);
+
+  useEffect(() => {
+    const sync = (value: string | null) => setShowOnline(value !== "0");
+    sync(localStorage.getItem("basecrew_online_status"));
+    const handler = (e: Event) => sync((e as CustomEvent<string>).detail);
+    window.addEventListener("basecrew-online-status", handler as EventListener);
+    return () => window.removeEventListener("basecrew-online-status", handler as EventListener);
+  }, []);
+
   return (
     <header className="sticky top-0 z-30 glass-nav">
       <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:pl-72">
@@ -180,13 +200,15 @@ function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
         </button>
         <div className="flex items-center gap-3 ml-auto">
           <CurrencySwitcher />
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 rounded-full">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-            </span>
-            <span className="text-xs font-medium text-emerald-700">Online</span>
-          </div>
+          {showOnline && (
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 rounded-full">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span className="text-xs font-medium text-emerald-700">Online</span>
+            </div>
+          )}
         </div>
       </div>
     </header>
