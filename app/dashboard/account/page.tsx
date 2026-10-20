@@ -161,13 +161,6 @@ export default function AccountPage() {
           <p className="text-lg font-semibold text-gray-900 truncate">{profile.name}</p>
           <p className="text-sm text-gray-500 truncate">{profile.email}</p>
         </div>
-        <span
-          className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium ${
-            profile.role === "admin" ? "bg-amber-50 text-amber-700" : "bg-indigo-50 text-indigo-700"
-          }`}
-        >
-          {profile.role === "admin" ? "Admin" : "Member"}
-        </span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -343,10 +336,6 @@ export default function AccountPage() {
                 </dd>
               </div>
               <div className="flex items-center justify-between gap-3">
-                <dt className="text-gray-500">Role</dt>
-                <dd className="text-gray-900 font-medium">{profile.role === "admin" ? "Admin" : "Member"}</dd>
-              </div>
-              <div className="flex items-center justify-between gap-3">
                 <dt className="text-gray-500">Currency</dt>
                 <dd className="text-gray-900 font-medium">{currency.code}</dd>
               </div>
@@ -356,20 +345,19 @@ export default function AccountPage() {
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
             <h3 className="text-sm font-semibold text-gray-900 mb-2">About</h3>
             <p className="text-sm text-gray-600 leading-relaxed">
-              <span className="font-medium text-gray-900">BaseCrew Native/V1 Developer</span> — Musab Dawood
+              Web app version V1.0.0 Developed &amp; managed by Musab Dawood
             </p>
-            <a
-              href="https://musab-007.netlify.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-700"
-            >
-              musab-007.netlify.app
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-              </svg>
-            </a>
-            <p className="mt-2 text-xs text-gray-400">Click to access the developer&apos;s website</p>
+            <p className="mt-3 text-sm text-gray-500">
+              <a
+                href="https://musab-007.netlify.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-indigo-600 hover:text-indigo-700"
+              >
+                Click here
+              </a>{" "}
+              to learn more
+            </p>
           </div>
         </div>
       </div>
