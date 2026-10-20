@@ -67,7 +67,7 @@ const NAV_ITEMS = [
   },
 ];
 
-function Sidebar({ open, onClose, isAdmin, user }: { open: boolean; onClose: () => void; isAdmin: boolean; user: { name?: string | null; email?: string | null } }) {
+function Sidebar({ open, onClose, isAdmin, user }: { open: boolean; onClose: () => void; isAdmin: boolean; user?: { name?: string | null; email?: string | null } }) {
   const pathname = usePathname();
   const userName = user?.name || "User";
   const initials = userName
