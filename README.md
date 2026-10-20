@@ -1,76 +1,71 @@
 # Basecrew
 
-A full-stack business registration & management platform built with Next.js, MongoDB, and Tailwind CSS.
+> **Built by [Musab Projects](https://musab-007.netlify.app)** — a project group by Musab Dawood
+
+Basecrew is a full-stack business management platform built with Next.js, MongoDB, and Tailwind CSS. It helps businesses register their operations, manage products and services, track customers, process orders, record expenses, and monitor performance through a real-time dashboard.
 
 ## Features
 
-- **Business Registration** — Create and manage multiple businesses
-- **Product & Service Catalog** — Add products with pricing, SKUs, and stock tracking
-- **Customer Management** — Track customers and their order history
-- **Order Processing** — Create orders with line items, status tracking, and revenue calculation
-- **Expense Logging** — Log and categorize business expenses
-- **Real-Time Analytics** — Charts for revenue, expenses, profit, top products, and top customers
-- **Email OTP Verification** — Secure signup with email verification and PIN reset
-- **Currency Switching** — PKR, USD, EUR, GBP, SAR, AED support
-- **Glassmorphism UI** — Modern glass-effect design with scroll animations
-- **Terms & Privacy Policy** — Required checkbox before account creation
+- Business registration and management
+- Product and service catalog with pricing, SKUs, and stock tracking
+- Customer management and order history
+- Order processing with line items, status tracking, and revenue calculations
+- Expense logging and categorization
+- Analytics for revenue, expenses, profit, top products, and top customers
+- Email OTP verification during signup
+- PIN-based authentication and reset flows
+- Currency switching for PKR, USD, EUR, GBP, SAR, and AED
+- Glassmorphism dashboard with responsive layouts and scroll animations
+- Terms and privacy consent before account creation
 
-## Tech Stack
+## Tech stack
 
-- **Framework:** Next.js 16 (App Router)
-- **Database:** MongoDB (Mongoose 9)
-- **Auth:** NextAuth v4 (JWT strategy)
-- **Styling:** Tailwind CSS 4
-- **Charts:** Recharts
-- **Email:** Nodemailer (Gmail SMTP)
+| Area | Technology |
+|---|---|
+| Framework | Next.js 16.2.12 |
+| Language | TypeScript 5 |
+| UI | React 19.2.4 |
+| Styling | Tailwind CSS 4 |
+| Database | MongoDB with Mongoose 9.8.1 |
+| Authentication | NextAuth.js 4 with JWT strategy, bcryptjs, and PIN flows |
+| Charts | Recharts 3.10.1 |
+| Email | Nodemailer |
+| Deployment | Vercel-compatible Next.js deployment |
 
-## Getting Started
+## Getting started
 
-### 1. Install dependencies
+### Prerequisites
+
+- Node.js 20+
+- MongoDB or MongoDB Atlas
+- SMTP credentials for OTP email delivery
+
+### Installation
 
 ```bash
 npm install
-```
-
-### 2. Set up environment variables
-
-Copy `.env.example` to `.env.local` and fill in your values:
-
-```bash
-cp .env.example .env.local
-```
-
-### 3. Run the development server
-
-```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000).
 
-### 4. Seed demo data (optional)
+## Environment variables
 
-```bash
-curl -X POST http://localhost:3000/api/seed
-```
+Copy the project's example environment file to `.env.local` when available, then configure the MongoDB, NextAuth, and SMTP values required by the application. Never commit credentials to Git.
 
-## Environment Variables
+## Available scripts
 
-| Variable | Description |
+| Command | Description |
 |---|---|
-| `MONGODB_URI` | MongoDB connection string |
-| `NEXTAUTH_SECRET` | Random secret for NextAuth JWT |
-| `NEXTAUTH_URL` | Your app URL (e.g. `http://localhost:3000`) |
-| `SMTP_EMAIL` | Gmail address for sending OTP emails |
-| `SMTP_APP_PASSWORD` | Gmail app password for SMTP |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run start` | Start the production server |
+| `npm run lint` | Run ESLint |
 
-## Deploy on Vercel
+## Deployment
 
-1. Push to GitHub
-2. Import repo on [vercel.com](https://vercel.com)
-3. Add environment variables in Vercel dashboard
-4. Deploy
+Import the repository into Vercel, add the required environment variables, and deploy the Next.js application.
 
----
+## License
 
-**Project By Musab Dawood** — [musab-007.netlify.app](https://musab-007.netlify.app)
+Built by [Musab Projects](https://musab-007.netlify.app) — a project group by Musab Dawood.
